@@ -45,6 +45,8 @@ import com.jaspersoft.jasperserver.multipleTenancy.MTUserDetails.TenantInfo;
 public class OAuthUserDetailsServiceImpl implements OAuthUserDetailsService {
     private static Log log = LogFactory.getLog(OAuthUserDetailsServiceImpl.class);
 
+    private String usernameKey = "name";
+
     @Override
     public UserDetails parseUserDetails(String jsonResponse) {
          if (jsonResponse != null) {
@@ -62,7 +64,7 @@ public class OAuthUserDetailsServiceImpl implements OAuthUserDetailsService {
 
             try {
                 myclaims = new JSONObject(jsonResponse);
-                username = myclaims.getString("name");
+                username = myclaims.getString(usernameKey);
                 displayname = myclaims.getString("name");
                 if(myclaims.has("roles")) {
                     roles = myclaims.getString("roles");
@@ -179,5 +181,13 @@ public class OAuthUserDetailsServiceImpl implements OAuthUserDetailsService {
         // check during testing
         wrappingUser.setExternallyDefined(true);
         return wrappingUser;
+    }
+
+    public String getUsernameKey() {
+        return usernameKey;
+    }
+
+    public void setUsernameKey(String usernameKey) {
+        this.usernameKey = usernameKey;
     }
 }
